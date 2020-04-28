@@ -11,14 +11,21 @@ pipeline {
                 }
             }
             steps {
-                echo "Hello, ${PERSON}, nice to meet you."
+              script{
+                try{
+                  echo "Hello, ${PERSON}, nice to meet you."
+                  }
+                  catch (err){
+                    echo "Aborted by user"
+                    currentBuild.result = "SUCCESS"
+                  }
+                }
             }
         }
     }
     post {
         always {
             echo 'I will always say Hello again!'
-            currentBuild.result = "SUCCESS"
         }
     }
 }
