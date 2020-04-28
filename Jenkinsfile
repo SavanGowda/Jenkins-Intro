@@ -11,22 +11,20 @@ pipeline {
                 }
             }
             steps {
-              script{
-                try{
-                  echo "Hello, ${PERSON}, nice to meet you."
-                  }
-                  catch (err){
-                    echo "Aborted by user"
-                    currentBuild.result = "SUCCESS"
-                  }
-                }
+                echo "Hello, ${PERSON}, nice to meet you."
             }
         }
     }
     post {
-        always {
-            echo 'I will always say Hello again!'
-            sh '{currentBuild.result} = "SUCCESS"'
+        success {
+            echo 'I have finished deploying the green deployment'
         }
-    }
+        aborted {
+            echo 'The build has succeeded until blue deployment. The user has aborted the green deployment'
+            echo 'Rebuild the pipeline and choose - Yes, we should - to deploy the green deployment'
+        }
+        failure{
+            echo ' The build has failed!'
+        }
+      }
 }
